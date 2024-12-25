@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     speakBtn.addEventListener('click', () => {
         if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
         if (typeof Android !== 'undefined' && Android.speak) {
-            Android.speak(word);
+            Android.speak(`${currentHanja.뜻}. ${currentHanja.음}`);
         }
 
         else if ('speechSynthesis' in window) {
