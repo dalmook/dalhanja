@@ -141,6 +141,7 @@ button:hover {
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #ffffff;
+    touch-action: none;
 }
 
 .completion-checkbox {

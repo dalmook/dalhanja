@@ -58,23 +58,26 @@ document.addEventListener('DOMContentLoaded', () => {
     writingCanvas.addEventListener('mousedown', startDrawing);
     writingCanvas.addEventListener('mouseup', stopDrawing);
     writingCanvas.addEventListener('mousemove', draw);
-    writingCanvas.addEventListener('touchstart', startDrawing);
+    writingCanvas.addEventListener('touchstart', startDrawing, {passive: false});
     writingCanvas.addEventListener('touchend', stopDrawing);
-    writingCanvas.addEventListener('touchmove', draw);
+    writingCanvas.addEventListener('touchmove', draw, {passive: false});
 
     function startDrawing(e) {
+        e.preventDefault();
         drawing = true;
         ctx.beginPath();
         const { x, y } = getCanvasCoordinates(e);
         ctx.moveTo(x, y);
     }
 
-    function stopDrawing() {
+    function stopDrawing(e) {
+        e.preventDefault();
         drawing = false;
     }
 
     function draw(e) {
         if (!drawing) return;
+        e.preventDefault();
         const { x, y } = getCanvasCoordinates(e);
         ctx.lineTo(x, y);
         ctx.stroke();
@@ -84,11 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const rect = writingCanvas.getBoundingClientRect();
         let x, y;
         if (e.touches) {
-            x = e.touches[0].clientX - rect.left;
-            y = e.touches[0].clientY - rect.top;
+            x = (e.touches[0].clientX - rect.left) * (writingCanvas.width / rect.width);
+            y = (e.touches[0].clientY - rect.top) * (writingCanvas.height / rect.height);
         } else {
-            x = e.clientX - rect.left;
-            y = e.clientY - rect.top;
+            x = (e.clientX - rect.left) * (writingCanvas.width / rect.width);
+            y = (e.clientY - rect.top) * (writingCanvas.height / rect.height);
         }
         return { x, y };
     }
@@ -378,17 +381,20 @@ document.addEventListener('DOMContentLoaded', () => {
         loadNextQuizQuestion();
     }
 
-    function generateQuizQuestions() {
-        // 모든 한자 중에서 10개 무작위 선택
-        quizQuestions = shuffleArray([...Array(hanjaData.length).keys()]).slice(0, 10).map(index => hanjaData[index]);
-    }
-
     function loadNextQuizQuestion() {
         if (quizQuestions.length === 0) {
             quizQuestion.innerText = '퀴즈 완료!';
             quizOptions.innerHTML = '';
             quizFeedback.innerText = '';
             nextQuizBtn.style.display = 'none';
+            // Update high score if necessary
+            let currentScore = parseInt(currentScoreSpan.innerText);
+            let highScore = parseInt(localStorage.getItem('highScore')) || 0;
+            if (currentScore > highScore) {
+                highScore = currentScore;
+                localStorage.setItem('highScore', highScore.toString());
+                highScoreSpan.innerText = highScore.toString();
+            }
             return;
         }
 
@@ -578,14 +584,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let highScore = localStorage.getItem('highScore') || '0';
         highScoreSpan.innerText = highScore;
         loadNextQuizQuestion();
-    }
-
-    // 퀴즈 게임 시작
-    function startQuizGame() {
-        showScreen(gameScreen);
-        quizGame.style.display = 'block';
-        matchingGame.style.display = 'none';
-        initializeQuiz();
     }
 
     function loadNextQuizQuestion() {
