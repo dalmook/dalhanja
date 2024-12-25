@@ -20,6 +20,14 @@
             <button class="difficulty-btn" data-level="7">7급</button>
             <button class="difficulty-btn" data-level="8">8급</button>
         </div>
+        
+        <!-- 학습완료 한자 관리 섹션 추가 -->
+        <div id="learned-hanja-management" class="learned-hanja-section">
+            <h2>학습완료 한자 관리</h2>
+            <div id="learned-hanja-list">
+                <!-- 학습완료 한자가 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
     </div>
 
     <!-- 메인 메뉴 화면 -->
@@ -49,13 +57,21 @@
                 <button id="speak-btn">🔊</button>
             </div>
             <div class="hanja-details">
-                <p><span id="hanja-meaning"></span> (<span id="hanja-reading"></span>)</p>
+                <p><span id="hanja-meaning"></span> (<span id="hanja-reading" class="reading"></span>)</p>
             </div>
             <!-- 쓰기 순서 이미지를 숨깁니다 -->
             <div class="stroke-order" style="display: none;">
                 <img id="stroke-order-img" src="" alt="쓰기 순서">
             </div>
             <canvas id="writing-canvas" width="300" height="300"></canvas>
+            <button id="clear-canvas-btn" class="action-btn">쓰기 초기화</button>
+            
+            <!-- 학습완료 체크박스 추가 -->
+            <div class="completion-checkbox">
+                <label>
+                    <input type="checkbox" id="mark-completed"> 학습 완료
+                </label>
+            </div>
         </div>
         <div class="navigation-buttons">
             <button id="prev-btn">이전</button>
@@ -67,7 +83,28 @@
     <!-- 낱말게임 화면 -->
     <div id="game-screen" class="screen">
         <h1>낱말게임 - <span id="game-level"></span></h1>
-        <!-- 게임 내용이 여기에 추가됩니다 -->
+        <div class="game-options">
+            <button id="quiz-game-btn">퀴즈 게임</button>
+            <button id="matching-game-btn">매칭 게임</button>
+        </div>
+        <div id="quiz-game" class="game-content" style="display: none;">
+            <h2>퀴즈 게임</h2>
+            <!-- 점수 표시 영역 추가 -->
+            <div class="score-section">
+                <p>현재 점수: <span id="current-score">0</span></p>
+                <p>최고 점수: <span id="high-score">0</span></p>
+            </div>
+            <div id="quiz-question"></div>
+            <div id="quiz-options" class="buttons"></div>
+            <div id="quiz-feedback"></div>
+            <button id="next-quiz-btn" class="action-btn" style="display: none;">다음 문제</button>
+        </div>
+        <div id="matching-game" class="game-content" style="display: none;">
+            <h2>매칭 게임</h2>
+            <div id="matching-game-board"></div>
+            <div id="matching-feedback"></div>
+            <button id="restart-matching-btn" class="action-btn">다시 시작</button>
+        </div>
         <button id="back-to-menu-from-game">뒤로가기</button>
     </div>
 
