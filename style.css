@@ -71,7 +71,10 @@ button:hover {
     margin-top: 20px;
     padding: 10px 20px;
 }
-
+#next-quiz-btn {
+    display: block;
+    margin: 20px auto;
+}
 .action-btn {
     background-color: #4CAF50;
     color: white;
