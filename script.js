@@ -514,7 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
             matchingFeedback.innerText = '매칭 성공!';
             matchedCount += 1;
             // 진도 저장
-            markHanjaAsLearned(item1.dataset.type === 'hanja' ? item1.dataset.text : item2.dataset.text);
+            // markHanjaAsLearned(item1.dataset.type === 'hanja' ? item1.dataset.text : item2.dataset.text);
         } else {
             // 매칭 실패
             item1.style.backgroundColor = '#add8e6';
