@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentScoreSpan = document.getElementById('current-score');
     const highScoreSpan = document.getElementById('high-score');
 
+    let currentHanja = null;
     let selectedLevel = '';
     let hanjaData = [];
     let currentIndex = 0;
@@ -199,9 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 발음 듣기 버튼
     speakBtn.addEventListener('click', () => {
-        if (hanjaData.length === 0) return;
-        const hanja = hanjaData[shuffledIndices[currentIndex]];
-        const textToSpeak = `${hanja.뜻}. ${hanja.음}`;
+        if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
+        const textToSpeak = `${currentHanja.뜻}. ${currentHanja.음}`;
         const utterance = new SpeechSynthesisUtterance(textToSpeak);
         utterance.lang = 'ko-KR';
         window.speechSynthesis.speak(utterance);
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             unmarkHanjaAsLearned(hanja);
         }
-        currentIndex += 1; // 수정된 부분: 다음 한자로 이동
+        currentIndex += 1; // 다음 한자로 이동
         displayHanja(); // 업데이트 후 표시
     });
 
@@ -236,10 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 한자 표시 함수 (학습 완료된 한자는 제외)
     function displayHanja() {
         if (hanjaData.length === 0) return;
-
         const learnedHanja = getLearnedHanja();
         const availableIndices = shuffledIndices.filter(index => !learnedHanja.includes(hanjaData[index].한자));
-
         if (availableIndices.length === 0) {
             hanjaCharacter.innerText = '모든 한자를 학습 완료했습니다!';
             hanjaMeaning.innerText = '';
@@ -247,34 +245,30 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.clearRect(0, 0, writingCanvas.width, writingCanvas.height);
             markCompletedCheckbox.checked = false;
             markCompletedCheckbox.disabled = true;
+            currentHanja = null; // 추가된 부분
             return;
         }
-
         // 현재 인덱스가 범위를 벗어나지 않도록 조정
         if (currentIndex >= availableIndices.length) {
             currentIndex = availableIndices.length - 1;
         }
-
-        const hanja = hanjaData[availableIndices[currentIndex]];
-        hanjaCharacter.innerText = hanja.한자;
-        hanjaMeaning.innerText = hanja.뜻;
-        hanjaReading.innerText = hanja.음;
-
+        currentHanja = hanjaData[availableIndices[currentIndex]]; // 수정된 부분
+        hanjaCharacter.innerText = currentHanja.한자;
+        hanjaMeaning.innerText = currentHanja.뜻;
+        hanjaReading.innerText = currentHanja.음;
         // 캔버스 초기화
         ctx.clearRect(0, 0, writingCanvas.width, writingCanvas.height);
-
         // 한자 가이드 그리기
         ctx.globalAlpha = 0.3; // 반투명
         ctx.font = '200px Arial'; // 한자 크기 조정
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#000000';
-        ctx.fillText(hanja.한자, writingCanvas.width / 2, writingCanvas.height / 2);
+        ctx.fillText(currentHanja.한자, writingCanvas.width / 2, writingCanvas.height / 2);
         ctx.globalAlpha = 1.0; // 다시 불투명하게
-
         // 학습완료 체크박스 상태 설정
         markCompletedCheckbox.disabled = false;
-        markCompletedCheckbox.checked = learnedHanja.includes(hanja.한자);
+        markCompletedCheckbox.checked = learnedHanja.includes(currentHanja.한자);
     }
 
     // 배열 섞기 함수
