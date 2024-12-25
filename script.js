@@ -201,10 +201,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // 발음 듣기 버튼
     speakBtn.addEventListener('click', () => {
         if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
-        const textToSpeak = `${currentHanja.뜻}. ${currentHanja.음}`;
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.lang = 'ko-KR';
-        window.speechSynthesis.speak(utterance);
+        if (typeof Android !== 'undefined' && Android.speak) {
+            Android.speak(word);
+        }
+
+        else if ('speechSynthesis' in window) {
+            const textToSpeak = `${currentHanja.뜻}. ${currentHanja.음}`;
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'ko-KR';
+            window.speechSynthesis.speak(utterance);
+        }
+        else {
+            console.warn("이 브라우저는 음성 합성을 지원하지 않습니다.");
+        }
     });
 
     // 학습완료 체크박스 이벤트
