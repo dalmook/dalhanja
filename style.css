@@ -271,6 +271,20 @@ button:hover {
     .learned-hanja-item {
         font-size: 14px;
     }
+    #matching-game-board {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        width: 100%;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .match-item {
+        width: 80px;
+        height: 80px;
+        font-size: 18px;
+    }
 }
 
 /* 모바일 가로 및 태블릿 */
