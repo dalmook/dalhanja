@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한자 학습 앱</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 난이도 선택 화면 -->
+    <div id="difficulty-screen" class="screen active">
+        <h1>난이도를 선택하세요</h1>
+        <div class="buttons">
+            <button class="difficulty-btn" data-level="초급">초급</button>
+            <button class="difficulty-btn" data-level="중급">중급</button>
+            <button class="difficulty-btn" data-level="고급">고급</button>
+        </div>
+    </div>
+
+    <!-- 메인 메뉴 화면 -->
+    <div id="main-menu-screen" class="screen">
+        <h1 id="selected-level-title">레벨: </h1>
+        <div class="buttons">
+            <button id="study-btn">학습하기</button>
+            <button id="game-btn">낱말게임</button>
+        </div>
+        <button id="back-to-difficulty">뒤로가기</button>
+    </div>
+
+    <!-- 학습하기 화면 -->
+    <div id="study-screen" class="screen">
+        <h1>학습하기 - <span id="study-level"></span></h1>
+        <!-- 학습 내용이 여기에 추가됩니다 -->
+        <button id="back-to-menu-from-study">뒤로가기</button>
+    </div>
+
+    <!-- 낱말게임 화면 -->
+    <div id="game-screen" class="screen">
+        <h1>낱말게임 - <span id="game-level"></span></h1>
+        <!-- 게임 내용이 여기에 추가됩니다 -->
+        <button id="back-to-menu-from-game">뒤로가기</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
