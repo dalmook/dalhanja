@@ -621,7 +621,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     quizFeedback.style.color = '#32cd32'; // 초록색
                     quizFeedback.innerText = `정답입니다! ${currentQuestion.뜻} (${currentQuestion.음})`;
                     let currentScore = parseInt(currentScoreSpan.innerText);
-                    currentScore += 1;
+                    currentScore += 10; // 수정된 부분: 점수 10점씩 증가
                     currentScoreSpan.innerText = currentScore.toString();
                 } else {
                     quizFeedback.style.color = '#ff0000'; // 빨간색
