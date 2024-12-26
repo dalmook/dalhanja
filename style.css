@@ -196,7 +196,10 @@ button:hover {
     font-weight: bold;
     color: #1e90ff;
     margin-bottom: 20px;
+    font-size: 1.2em;
 }
+
+/* quiz-option-btn 스타일 */
 .quiz-option-btn {
     display: block;
     width: 100%;
@@ -204,9 +207,36 @@ button:hover {
     margin: 5px 0;
     font-size: 16px;
     cursor: pointer;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
+
 .quiz-option-btn:hover {
-    background-color: #f0f0f0;
+    background-color: #e0e0e0;
+}
+/* quiz-feedback 스타일 */
+#quiz-feedback {
+    margin-top: 15px;
+    font-size: 1em;
+}
+
+/* next-quiz-btn 스타일 */
+#next-quiz-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #1e90ff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#next-quiz-btn:hover {
+    background-color: #0d6efd;
 }
 #quiz-options, #matching-game-board {
     display: flex;
