@@ -31,7 +31,15 @@ h1, h2 {
     gap: 10px;
     margin-bottom: 20px;
 }
+/* 추가된 스타일 */
+#manage-learned-hanja-screen {
+    display: none;
+    padding: 20px;
+}
 
+#manage-learned-hanja-screen.active {
+    display: block;
+}
 button {
     padding: 10px 15px;
     font-size: 16px;
