@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const hanjaCharacter = document.getElementById('hanja-character');
     const hanjaMeaning = document.getElementById('hanja-meaning');
     const hanjaReading = document.getElementById('hanja-reading');
+    const hanjaChinese = document.getElementById('hanja-chinese'); // 추가된 부분
     const speakBtn = document.getElementById('speak-btn');
     const writingCanvas = document.getElementById('writing-canvas');
     const clearCanvasBtn = document.getElementById('clear-canvas-btn');
@@ -216,16 +217,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 발음 듣기 버튼
     speakBtn.addEventListener('click', () => {
-        if (typeof Android !== 'undefined' && Android.speak) { // 안드로이드 앱용 수정된 부분
-            if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
-            Android.speak(`${currentHanja.뜻}. ${currentHanja.음}`);
+        if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
+
+        const koreanText = `${currentHanja.뜻}. ${currentHanja.음}`;
+        const chineseText = currentHanja.중국어;
+
+        // 안드로이드 환경에서 TTS 지원
+        if (typeof Android !== 'undefined' && Android.speak) {
+            Android.speak(`${koreanText}. ${chineseText}`);
         }
+        // 웹 브라우저에서 TTS 지원
         else if ('speechSynthesis' in window) {
-            if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
-            const textToSpeak = `${currentHanja.뜻}. ${currentHanja.음}`;
-            const utterance = new SpeechSynthesisUtterance(textToSpeak);
-            utterance.lang = 'ko-KR';
-            window.speechSynthesis.speak(utterance);
+            const utteranceKorean = new SpeechSynthesisUtterance(koreanText);
+            utteranceKorean.lang = 'ko-KR';
+            window.speechSynthesis.speak(utteranceKorean);
+
+            const utteranceChinese = new SpeechSynthesisUtterance(chineseText);
+            utteranceChinese.lang = 'zh-CN'; // 중국어 발음 설정
+            window.speechSynthesis.speak(utteranceChinese);
         }
         else {
             console.warn("이 브라우저는 음성 합성을 지원하지 않습니다.");
@@ -269,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
             hanjaCharacter.innerText = '모든 한자를 학습 완료했습니다!';
             hanjaMeaning.innerText = '';
             hanjaReading.innerText = '';
+            hanjaChinese.innerText = ''; // 중국어 발음 초기화
             ctx.clearRect(0, 0, writingCanvas.width, writingCanvas.height);
             markCompletedCheckbox.checked = false;
             markCompletedCheckbox.disabled = true;
@@ -283,6 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hanjaCharacter.innerText = currentHanja.한자;
         hanjaMeaning.innerText = currentHanja.뜻;
         hanjaReading.innerText = currentHanja.음;
+        hanjaChinese.innerText = currentHanja.중국어; // 중국어 발음 표시
         // 캔버스 초기화
         ctx.clearRect(0, 0, writingCanvas.width, writingCanvas.height);
         // 한자 가이드 그리기
