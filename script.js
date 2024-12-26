@@ -136,6 +136,16 @@ document.addEventListener('DOMContentLoaded', () => {
         startMatchingGame();
     });
 
+    // 완료 한자관리 버튼 클릭 시
+    manageLearnedHanjaBtn.addEventListener('click', () => {
+        showScreen(manageLearnedHanjaScreen);
+    });
+
+    // 완료 한자관리 화면에서 뒤로가기 버튼 클릭 시
+    backToMenuFromManaged.addEventListener('click', () => {
+        showScreen(mainMenuScreen);
+    });    
+
     // 뒤로가기 버튼 (학습하기 화면에서 메인 메뉴로)
     backToMenuFromStudy.addEventListener('click', () => {
         showScreen(mainMenuScreen);
@@ -161,17 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (screen === manageLearnedHanjaScreen) { // 추가된 부분
             loadLearnedHanjaManagement();
         }
-        
     }
-    // 메인 메뉴에서 완료 한자관리 버튼 클릭 시
-    manageLearnedHanjaBtn.addEventListener('click', () => {
-        showScreen(manageLearnedHanjaScreen);
-    });
-
-    // 완료 한자관리 화면에서 뒤로가기 버튼 클릭 시
-    backToMenuFromManaged.addEventListener('click', () => {
-        showScreen(mainMenuScreen);
-    });    
 
     // 학습하기 초기화 함수
     function initializeStudy() {
@@ -215,12 +215,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 발음 듣기 버튼
     speakBtn.addEventListener('click', () => {
-        if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
-        if (typeof Android !== 'undefined' && Android.speak) {
+        if (typeof Android !== 'undefined' && Android.speak) { // 안드로이드 앱용 수정된 부분
+            if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
             Android.speak(`${currentHanja.뜻}. ${currentHanja.음}`);
         }
-
         else if ('speechSynthesis' in window) {
+            if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
             const textToSpeak = `${currentHanja.뜻}. ${currentHanja.음}`;
             const utterance = new SpeechSynthesisUtterance(textToSpeak);
             utterance.lang = 'ko-KR';
@@ -233,14 +233,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 학습완료 체크박스 이벤트
     markCompletedCheckbox.addEventListener('change', () => {
-        const hanja = hanjaData[shuffledIndices[currentIndex]].한자;
-        if (markCompletedCheckbox.checked) {
-            markHanjaAsLearned(hanja);
-        } else {
-            unmarkHanjaAsLearned(hanja);
+        const hanja = currentHanja ? currentHanja.한자 : null;
+        if (hanja) {
+            if (markCompletedCheckbox.checked) {
+                markHanjaAsLearned(hanja);
+            } else {
+                unmarkHanjaAsLearned(hanja);
+            }
+            currentIndex += 1; // 다음 한자로 이동
+            displayHanja(); // 업데이트 후 표시
         }
-        currentIndex += 1; // 다음 한자로 이동
-        displayHanja(); // 업데이트 후 표시
     });
 
     // 한자 데이터 로드
@@ -269,14 +271,14 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.clearRect(0, 0, writingCanvas.width, writingCanvas.height);
             markCompletedCheckbox.checked = false;
             markCompletedCheckbox.disabled = true;
-            currentHanja = null; // 추가된 부분
+            currentHanja = null; // 현재 한자 없앰
             return;
         }
         // 현재 인덱스가 범위를 벗어나지 않도록 조정
         if (currentIndex >= availableIndices.length) {
             currentIndex = availableIndices.length - 1;
         }
-        currentHanja = hanjaData[availableIndices[currentIndex]]; // 수정된 부분
+        currentHanja = hanjaData[availableIndices[currentIndex]]; // 현재 한자 설정
         hanjaCharacter.innerText = currentHanja.한자;
         hanjaMeaning.innerText = currentHanja.뜻;
         hanjaReading.innerText = currentHanja.음;
@@ -395,8 +397,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function initializeQuiz() {
         quizQuestions = shuffleArray([...Array(hanjaData.length).keys()]).slice(0, 10).map(index => hanjaData[index]);
         currentScoreSpan.innerText = '0';
-        let highScore = localStorage.getItem('highScore') || '0';
-        highScoreSpan.innerText = highScore;
+        let highScore = parseInt(localStorage.getItem('highScore')) || 0;
+        highScoreSpan.innerText = highScore.toString();
         loadNextQuizQuestion();
     }
 
@@ -440,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     quizFeedback.style.color = '#32cd32'; // 초록색
                     quizFeedback.innerText = `정답입니다! ${currentQuestion.뜻} (${currentQuestion.음})`;
                     let currentScore = parseInt(currentScoreSpan.innerText);
-                    currentScore += 10;
+                    currentScore += 10; // 점수 10점씩 증가
                     currentScoreSpan.innerText = currentScore.toString();
                 } else {
                     quizFeedback.style.color = '#ff0000'; // 빨간색
@@ -529,7 +531,7 @@ document.addEventListener('DOMContentLoaded', () => {
             matchingFeedback.innerText = '매칭 성공!';
             matchedCount += 1;
             // 진도 저장
-            // markHanjaAsLearned(item1.dataset.type === 'hanja' ? item1.dataset.text : item2.dataset.text);
+            markHanjaAsLearned(item1.dataset.type === 'hanja' ? item1.dataset.text : item2.dataset.text);
         } else {
             // 매칭 실패
             item1.style.backgroundColor = '#add8e6';
@@ -597,70 +599,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 낱말게임에서 모든 한자 포함
-    function initializeQuiz() {
-        quizQuestions = shuffleArray([...Array(hanjaData.length).keys()]).slice(0, 10).map(index => hanjaData[index]);
-        currentScoreSpan.innerText = '0';
-        let highScore = localStorage.getItem('highScore') || '0';
-        highScoreSpan.innerText = highScore;
-        loadNextQuizQuestion();
-    }
+    // initializeQuiz 함수 이미 위에 정의됨
 
-    function loadNextQuizQuestion() {
-        if (quizQuestions.length === 0) {
-            quizQuestion.innerText = '퀴즈 완료!';
-            quizOptions.innerHTML = '';
-            quizFeedback.innerText = '';
-            nextQuizBtn.style.display = 'none';
-            // Update high score if necessary
-            let currentScore = parseInt(currentScoreSpan.innerText);
-            let highScore = parseInt(localStorage.getItem('highScore')) || 0;
-            if (currentScore > highScore) {
-                highScore = currentScore;
-                localStorage.setItem('highScore', highScore.toString());
-                highScoreSpan.innerText = highScore.toString();
-            }
-            return;
-        }
-
-        const currentQuestion = quizQuestions.shift();
-        quizQuestion.innerText = `뜻이 "${currentQuestion.뜻}"인 한자는?`;
-
-        // 옵션 생성 (정답 포함 총 4개)
-        let options = [currentQuestion.한자];
-        while (options.length < 4 && hanjaData.length > options.length) {
-            const randomHanja = hanjaData[Math.floor(Math.random() * hanjaData.length)].한자;
-            if (!options.includes(randomHanja)) {
-                options.push(randomHanja);
-            }
-        }
-        options = shuffleArray(options);
-
-        // 옵션 버튼 생성
-        quizOptions.innerHTML = '';
-        options.forEach(option => {
-            const btn = document.createElement('button');
-            btn.innerText = option;
-            btn.addEventListener('click', () => {
-                if (option === currentQuestion.한자) {
-                    quizFeedback.style.color = '#32cd32'; // 초록색
-                    quizFeedback.innerText = `정답입니다! ${currentQuestion.뜻} (${currentQuestion.음})`;
-                    let currentScore = parseInt(currentScoreSpan.innerText);
-                    currentScore += 10; // 수정된 부분: 점수 10점씩 증가
-                    currentScoreSpan.innerText = currentScore.toString();
-                } else {
-                    quizFeedback.style.color = '#ff0000'; // 빨간색
-                    quizFeedback.innerText = '오답입니다.';
-                }
-                nextQuizBtn.style.display = 'block';
-            });
-            quizOptions.appendChild(btn);
-        });
-
-        quizFeedback.innerText = '';
-        nextQuizBtn.style.display = 'none';
-    }
-
-    nextQuizBtn.addEventListener('click', () => {
-        loadNextQuizQuestion();
-    });
+    // Cordova deviceready 이벤트 핸들링
+    document.addEventListener('deviceready', () => {
+        console.log('Cordova is ready');
+        // Cordova 관련 초기화 작업 가능
+    }, false);
 });
