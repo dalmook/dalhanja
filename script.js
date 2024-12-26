@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 캔버스 설정
     const ctx = writingCanvas.getContext('2d');
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 5;
     ctx.lineCap = 'round'; // 선 끝을 둥글게
     ctx.lineJoin = 'round'; // 선이 만나는 지점을 둥글게
     let drawing = false;
@@ -300,12 +300,32 @@ document.addEventListener('DOMContentLoaded', () => {
         // 캔버스 초기화
         ctx.clearRect(0, 0, writingCanvas.width, writingCanvas.height);
         // 한자 가이드 그리기
+        // **동적 폰트 크기 설정 시작**
+        const canvasWidth = writingCanvas.width;
+        const canvasHeight = writingCanvas.height;
+        const hanjaText = currentHanja.한자;
+        const maxFontSize = 200; // 최대 폰트 크기
+        const minFontSize = 50;  // 최소 폰트 크기
+        let fontSize = maxFontSize;
+
+        // 폰트 크기를 조절하여 텍스트가 캔버스 내에 들어오도록 함
+        while (fontSize > minFontSize) {
+            ctx.font = `${fontSize}px Arial`;
+            const textMetrics = ctx.measureText(hanjaText);
+            const textWidth = textMetrics.width;
+            const textHeight = fontSize; // 대략적인 텍스트 높이
+
+            if (textWidth <= canvasWidth * 0.8 && textHeight <= canvasHeight * 0.8) {
+                break;
+            }
+            fontSize -= 10;
+        }
+        // **동적 폰트 크기 설정 끝**        
         ctx.globalAlpha = 0.3; // 반투명
-        ctx.font = '200px Arial'; // 한자 크기 조정
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#000000';
-        ctx.fillText(currentHanja.한자, writingCanvas.width / 2, writingCanvas.height / 2);
+        ctx.fillText(hanjaText, canvasWidth / 2, canvasHeight / 2);
         ctx.globalAlpha = 1.0; // 다시 불투명하게
         // 학습완료 체크박스 상태 설정
         markCompletedCheckbox.disabled = false;
