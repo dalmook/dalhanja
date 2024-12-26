@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 캔버스 설정
     const ctx = writingCanvas.getContext('2d');
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 10;
     ctx.lineCap = 'round'; // 선 끝을 둥글게
     ctx.lineJoin = 'round'; // 선이 만나는 지점을 둥글게
     let drawing = false;
