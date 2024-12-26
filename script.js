@@ -402,7 +402,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initializeQuiz() {
-        quizQuestions = shuffleArray([...Array(hanjaData.length).keys()]).slice(0, 10).map(index => hanjaData[index]);
+        const totalQuestions = Math.min(20, hanjaData.length); // 총 20문제 또는 가능한 최대 문제 수
+        quizQuestions = shuffleArray([...Array(hanjaData.length).keys()]).slice(0, totalQuestions).map(index => hanjaData[index]);
         currentScoreSpan.innerText = '0';
         let highScore = parseInt(localStorage.getItem('highScore')) || 0;
         highScoreSpan.innerText = highScore.toString();
@@ -411,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadNextQuizQuestion() {
         if (quizQuestions.length === 0) {
-            quizQuestion.innerText = '퀴즈 완료!';
+            quizQuestion.innerHTML = '<b style="color: #ff6347;">퀴즈 완료!</b>'; // 질문을 bold 및 색상 변경
             quizOptions.innerHTML = '';
             quizFeedback.innerText = '';
             nextQuizBtn.style.display = 'none';
@@ -427,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const currentQuestion = quizQuestions.shift();
-        quizQuestion.innerText = `뜻이 "${currentQuestion.뜻}"인 한자는?`;
+        quizQuestion.innerHTML = `<b style="color: #1e90ff;">뜻이 "${currentQuestion.뜻}"인 한자는?</b>`; // 질문을 bold 및 색상 변경
 
         // 옵션 생성 (정답 포함 총 4개)
         let options = [currentQuestion.한자];
@@ -444,6 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
         options.forEach(option => {
             const btn = document.createElement('button');
             btn.innerText = option;
+            btn.classList.add('quiz-option-btn'); // 추가된 클래스
             btn.addEventListener('click', () => {
                 if (option === currentQuestion.한자) {
                     quizFeedback.style.color = '#32cd32'; // 초록색
@@ -454,6 +456,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     quizFeedback.style.color = '#ff0000'; // 빨간색
                     quizFeedback.innerText = '오답입니다.';
+                    let currentScore = parseInt(currentScoreSpan.innerText);
+                    currentScore -= 5; // 점수 -5점
+                    currentScoreSpan.innerText = currentScore.toString();
                 }
                 nextQuizBtn.style.display = 'block';
             });
@@ -620,9 +625,6 @@ document.addEventListener('DOMContentLoaded', () => {
             learnedHanjaList.appendChild(div);
         });
     }
-
-    // 낱말게임에서 모든 한자 포함
-    // initializeQuiz 함수 이미 위에 정의됨
 
     // Cordova deviceready 이벤트 핸들링
     document.addEventListener('deviceready', () => {
