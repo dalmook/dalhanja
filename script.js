@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIndex = 0;
     let isRandom = false;
     let shuffledIndices = [];
+    let isProcessing = false; // 추가된 부분
 
     // 캔버스 설정
     const ctx = writingCanvas.getContext('2d');
@@ -483,6 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
         matchingGameBoard.innerHTML = '';
         matchingFeedback.innerText = '';
         matchedCount = 0;
+        isProcessing = false; // 초기화
 
         // 준비할 매칭 쌍을 선택 (최대 8쌍)
         const pairCount = Math.min(8, hanjaData.length);
@@ -512,7 +514,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleMatchingClick(e) {
         const clickedItem = e.currentTarget;
-        if (clickedItem.classList.contains('matched') || selectedItems.includes(clickedItem)) {
+
+        if (isProcessing || clickedItem.classList.contains('matched')) {
+            return;
+        }
+
+        const alreadySelectedIndex = selectedItems.indexOf(clickedItem);
+        if (alreadySelectedIndex !== -1) {
+            // 이미 선택된 카드 클릭 시 해제
+            clickedItem.style.backgroundColor = '#add8e6'; // 원래 색으로 되돌리기
+            selectedItems.splice(alreadySelectedIndex, 1);
             return;
         }
 
@@ -520,12 +531,14 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedItems.push(clickedItem);
 
         if (selectedItems.length === 2) {
+            isProcessing = true;
             setTimeout(checkMatching, 500);
         }
     }
 
     function checkMatching() {
         const [item1, item2] = selectedItems;
+
         if (
             (item1.dataset.type === 'hanja' && item2.dataset.type === 'meaning' && isMatchingPair(item1.dataset.text, item2.dataset.text)) ||
             (item1.dataset.type === 'meaning' && item2.dataset.type === 'hanja' && isMatchingPair(item2.dataset.text, item1.dataset.text))
@@ -537,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
             matchingFeedback.innerText = '매칭 성공!';
             matchedCount += 1;
             // 진도 저장
-            // markHanjaAsLearned(item1.dataset.type === 'hanja' ? item1.dataset.text : item2.dataset.text);
+            markHanjaAsLearned(item1.dataset.type === 'hanja' ? item1.dataset.text : item2.dataset.text);
         } else {
             // 매칭 실패
             item1.style.backgroundColor = '#add8e6';
@@ -546,6 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
             matchingFeedback.innerText = '매칭 실패!';
         }
         selectedItems = [];
+        isProcessing = false;
 
         if (matchedCount === matchingPairs.length) {
             matchingFeedback.innerText += ' 모든 매칭을 완료했습니다!';
