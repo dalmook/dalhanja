@@ -37,10 +37,18 @@
         <div class="buttons">
             <button id="study-btn">학습하기</button>
             <button id="game-btn">낱말게임</button>
+            <button id="manage-learned-hanja-btn">완료 한자관리</button> <!-- 추가된 부분 -->
         </div>
         <button id="back-to-difficulty">뒤로가기</button>
     </div>
-
+    <!-- 완료 한자관리 화면 -->
+    <div id="manage-learned-hanja-screen" class="screen">
+        <h2>학습완료 한자 관리</h2>
+        <div id="learned-hanja-list">
+            <!-- 학습완료 한자가 여기에 동적으로 추가됩니다 -->
+        </div>
+        <button id="back-to-menu-from-managed">뒤로가기</button> <!-- 추가된 부분 -->
+    </div>
     <!-- 학습하기 화면 -->
     <div id="study-screen" class="screen">
         <h1>학습하기 - <span id="study-level"></span></h1>
