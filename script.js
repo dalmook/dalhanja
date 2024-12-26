@@ -218,20 +218,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // 발음 듣기 버튼
     speakBtn.addEventListener('click', () => {
         if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
-
+    
         const koreanText = `${currentHanja.뜻}. ${currentHanja.음}`;
         const chineseText = currentHanja.중국어;
-
+    
         // 안드로이드 환경에서 TTS 지원
         if (typeof Android !== 'undefined' && Android.speak) {
-            Android.speak(`${koreanText}. ${chineseText}`);
+            Android.speak(koreanText, chineseText); // 두 개의 파라미터로 전달
         }
         // 웹 브라우저에서 TTS 지원
         else if ('speechSynthesis' in window) {
             const utteranceKorean = new SpeechSynthesisUtterance(koreanText);
             utteranceKorean.lang = 'ko-KR';
             window.speechSynthesis.speak(utteranceKorean);
-
+    
             const utteranceChinese = new SpeechSynthesisUtterance(chineseText);
             utteranceChinese.lang = 'zh-CN'; // 중국어 발음 설정
             window.speechSynthesis.speak(utteranceChinese);
