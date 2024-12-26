@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         screen.classList.add('active');
         if (screen === difficultyScreen) {
-            loadLearnedHanjaManagement();
+            // 기존 로직 (필요 시 추가)
         } else if (screen === manageLearnedHanjaScreen) { // 추가된 부분
             loadLearnedHanjaManagement();
         }
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 한자 표시 함수 (학습 완료된 한자는 제외)
     function displayHanja() {
         if (hanjaData.length === 0) return;
-        const learnedHanja = getLearnedHanja();
+        const learnedHanja = getLearnedHanja(selectedLevel);
         const availableIndices = shuffledIndices.filter(index => !learnedHanja.includes(hanjaData[index].한자));
         if (availableIndices.length === 0) {
             hanjaCharacter.innerText = '모든 한자를 학습 완료했습니다!';
@@ -321,36 +321,42 @@ document.addEventListener('DOMContentLoaded', () => {
         return progress[level] || 0;
     }
 
-    // 학습완료 한자 저장 함수
+    // 학습완료 한자 저장 함수 (레벨별)
     function markHanjaAsLearned(hanja) {
-        let learned = JSON.parse(localStorage.getItem('learnedHanja')) || [];
-        if (!learned.includes(hanja)) {
-            learned.push(hanja);
+        let learned = JSON.parse(localStorage.getItem('learnedHanja')) || {};
+        if (!learned[selectedLevel]) {
+            learned[selectedLevel] = [];
+        }
+        if (!learned[selectedLevel].includes(hanja)) {
+            learned[selectedLevel].push(hanja);
             localStorage.setItem('learnedHanja', JSON.stringify(learned));
             loadLearnedHanjaManagement();
         }
     }
 
-    // 학습완료 한자 해제 함수
+    // 학습완료 한자 해제 함수 (레벨별)
     function unmarkHanjaAsLearned(hanja) {
-        let learned = JSON.parse(localStorage.getItem('learnedHanja')) || [];
-        const index = learned.indexOf(hanja);
-        if (index > -1) {
-            learned.splice(index, 1);
-            localStorage.setItem('learnedHanja', JSON.stringify(learned));
-            loadLearnedHanjaManagement();
+        let learned = JSON.parse(localStorage.getItem('learnedHanja')) || {};
+        if (learned[selectedLevel]) {
+            const index = learned[selectedLevel].indexOf(hanja);
+            if (index > -1) {
+                learned[selectedLevel].splice(index, 1);
+                localStorage.setItem('learnedHanja', JSON.stringify(learned));
+                loadLearnedHanjaManagement();
+            }
         }
     }
 
-    // 학습완료 한자 불러오기
-    function getLearnedHanja() {
-        return JSON.parse(localStorage.getItem('learnedHanja')) || [];
+    // 학습완료 한자 불러오기 (레벨별)
+    function getLearnedHanja(level) {
+        let learned = JSON.parse(localStorage.getItem('learnedHanja')) || {};
+        return learned[level] || [];
     }
 
     // 학습완료 한자 관리 로딩 함수
     function loadLearnedHanjaManagement() {
         learnedHanjaList.innerHTML = '';
-        const learnedHanja = getLearnedHanja();
+        const learnedHanja = getLearnedHanja(selectedLevel);
 
         if (learnedHanja.length === 0) {
             learnedHanjaList.innerText = '학습완료 한자가 없습니다.';
@@ -551,9 +557,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function markHanjaAsLearned(hanja) {
-        let learned = JSON.parse(localStorage.getItem('learnedHanja')) || [];
-        if (!learned.includes(hanja)) {
-            learned.push(hanja);
+        let learned = JSON.parse(localStorage.getItem('learnedHanja')) || {};
+        if (!learned[selectedLevel]) {
+            learned[selectedLevel] = [];
+        }
+        if (!learned[selectedLevel].includes(hanja)) {
+            learned[selectedLevel].push(hanja);
             localStorage.setItem('learnedHanja', JSON.stringify(learned));
             loadLearnedHanjaManagement();
         }
@@ -566,7 +575,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 학습완료 한자 관리 로딩 함수
     function loadLearnedHanjaManagement() {
         learnedHanjaList.innerHTML = '';
-        const learnedHanja = getLearnedHanja();
+        const learnedHanja = getLearnedHanja(selectedLevel);
 
         if (learnedHanja.length === 0) {
             learnedHanjaList.innerText = '학습완료 한자가 없습니다.';
