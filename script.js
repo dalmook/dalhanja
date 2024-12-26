@@ -158,7 +158,10 @@ document.addEventListener('DOMContentLoaded', () => {
         screen.classList.add('active');
         if (screen === difficultyScreen) {
             loadLearnedHanjaManagement();
+        } else if (screen === manageLearnedHanjaScreen) { // 추가된 부분
+            loadLearnedHanjaManagement();
         }
+        
     }
     // 메인 메뉴에서 완료 한자관리 버튼 클릭 시
     manageLearnedHanjaBtn.addEventListener('click', () => {
