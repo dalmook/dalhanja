@@ -5,11 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainMenuScreen = document.getElementById('main-menu-screen');
     const studyScreen = document.getElementById('study-screen');
     const gameScreen = document.getElementById('game-screen');
+    const manageLearnedHanjaScreen = document.getElementById('manage-learned-hanja-screen'); // 추가된 부분
 
     const difficultyButtons = document.querySelectorAll('.difficulty-btn');
     const backToDifficultyBtn = document.getElementById('back-to-difficulty');
     const studyBtn = document.getElementById('study-btn');
     const gameBtn = document.getElementById('game-btn');
+    const manageLearnedHanjaBtn = document.getElementById('manage-learned-hanja-btn'); // 추가된 부분
+    const backToMenuFromManaged = document.getElementById('back-to-menu-from-managed'); // 추가된 부분    
     const backToMenuFromStudy = document.getElementById('back-to-menu-from-study');
     const backToMenuFromGame = document.getElementById('back-to-menu-from-game');
 
@@ -157,6 +160,15 @@ document.addEventListener('DOMContentLoaded', () => {
             loadLearnedHanjaManagement();
         }
     }
+    // 메인 메뉴에서 완료 한자관리 버튼 클릭 시
+    manageLearnedHanjaBtn.addEventListener('click', () => {
+        showScreen(manageLearnedHanjaScreen);
+    });
+
+    // 완료 한자관리 화면에서 뒤로가기 버튼 클릭 시
+    backToMenuFromManaged.addEventListener('click', () => {
+        showScreen(mainMenuScreen);
+    });    
 
     // 학습하기 초기화 함수
     function initializeStudy() {
