@@ -193,10 +193,21 @@ button:hover {
 }
 
 #quiz-question {
-    font-size: 20px;
-    margin-bottom: 15px;
+    font-weight: bold;
+    color: #1e90ff;
+    margin-bottom: 20px;
 }
-
+.quiz-option-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    font-size: 16px;
+    cursor: pointer;
+}
+.quiz-option-btn:hover {
+    background-color: #f0f0f0;
+}
 #quiz-options, #matching-game-board {
     display: flex;
     flex-wrap: wrap;
@@ -205,7 +216,7 @@ button:hover {
     margin-bottom: 15px;
 }
 
-#quiz-feedback, #matching-feedback {
+#matching-feedback {
     margin-top: 15px;
     font-size: 18px;
     font-weight: bold;
