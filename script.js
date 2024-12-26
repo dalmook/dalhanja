@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const speakBtn = document.getElementById('speak-btn');
     const writingCanvas = document.getElementById('writing-canvas');
     const clearCanvasBtn = document.getElementById('clear-canvas-btn');
+    const goFirstBtn = document.getElementById('go-first-btn'); // 추가된 부분
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
     const orderOptions = document.getElementsByName('order');
@@ -166,7 +167,12 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.clearRect(0, 0, writingCanvas.width, writingCanvas.height);
         displayHanja(); // 한자 가이드 다시 그리기
     });
-
+    // 처음으로 버튼 추가
+    goFirstBtn.addEventListener('click', () => { // 추가된 부분
+        currentIndex = 0; // 첫 번째 한자로 설정
+        displayHanja(); // 한자 표시 함수 호출
+        saveProgress(selectedLevel, currentIndex); // 진도 저장
+    });
     // 화면 전환 함수
     function showScreen(screen) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
