@@ -1,9 +1,15 @@
 /* style.css */
 @import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Gamja+Flower&family=Gowun+Dodum&display=swap');
-
+@import url('https://dalmook.github.io/dalhanja/AlimamaDongFangDaKai-Regular.ttf');
+@font-face {
+    font-family: 'AlimamaDongFangDaKai-Regular';
+    src: url('https://dalmook.github.io/dalhanja/AlimamaDongFangDaKai-Regular.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+}
 
 body {
-    font-family: "Gowun Dodum", sans-serif;
+    font-family: "AlimamaDongFangDaKai-Regular", sans-serif;
     text-align: center;
     background-color: #f0f8ff;
     margin: 0;
