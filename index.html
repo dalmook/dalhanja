@@ -80,7 +80,7 @@
                 <input type="radio" name="order" value="random"> 랜덤
             </label>
         </div>
-        <div id="hanja-display">
+        <div id="hanja-display" style="position: relative;">
             <div class="hanja-info">
                 <span id="hanja-character"></span>
                 <button id="speak-btn">🔊</button>
@@ -88,6 +88,8 @@
             <div class="hanja-details">
                 <p><span id="hanja-meaning"></span> (<span id="hanja-reading" class="reading"></span>) -<span id="hanja-chinese"></span> </p>
             </div>
+            <!-- 쓰기 순서 SVG 이미지 추가 -->
+            <img id="stroke-order-svg" src="" alt="쓰기 순서" class="stroke-order-svg">            
             <!-- 쓰기 순서 이미지를 숨깁니다 -->
             <div class="stroke-order" style="display: none;">
                 <img id="stroke-order-img" src="" alt="쓰기 순서">
