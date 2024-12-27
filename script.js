@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // 폰트 크기를 조절하여 텍스트가 캔버스 내에 들어오도록 함
         while (fontSize > minFontSize) {
-            ctx.font = `${fontSize}px Arial`;
+            ctx.font = `${fontSize}px 'hanchanzhengkaiti', sans-serif`;
             const textMetrics = ctx.measureText(hanjaText);
             const textWidth = textMetrics.width;
             const textHeight = fontSize; // 대략적인 텍스트 높이

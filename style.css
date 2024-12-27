@@ -1,9 +1,17 @@
 /* style.css */
 @import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Gamja+Flower&family=Gowun+Dodum&display=swap');
+
+
+@font-face {
+    font-family: 'hanchanzhengkaiti';
+    src: url('./hanchanzhengkaiti.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
     
 /* 기본 스타일 */
 body {
-    font-family: "Gowun Dodum", sans-serif;
+    font-family: "hanchanzhengkaiti", sans-serif;
     text-align: center;
     background-color: #f0f8ff;
     margin: 0;
