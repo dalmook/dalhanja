@@ -89,20 +89,18 @@
             <div class="hanja-details">
                 <p><span id="hanja-meaning"></span> (<span id="hanja-reading" class="reading"></span>) -<span id="hanja-chinese"></span> </p>
             </div>
+            <object
+                id="stroke-order-svg"
+                type="image/svg+xml"
+                data=""
+                class="stroke-order-svg">
+            </object>            
             <!-- 쓰기 순서 SVG 이미지 추가 -->
             <img id="stroke-order-svg" src="" alt="쓰기 순서" class="stroke-order-svg">            
             <!-- 쓰기 순서 이미지를 숨깁니다 -->
             <div class="stroke-order" style="display: none;">
                 <img id="stroke-order-img" src="" alt="쓰기 순서">
             </div>
-            <!-- 학습하기 화면 내 SVG 오브젝트 -->
-            <!-- 학습하기 화면 내 SVG 오브젝트 -->
-<object
-    id="stroke-order-svg"
-    type="image/svg+xml"
-    data=""
-    class="stroke-order-svg">
-</object>
             <canvas id="writing-canvas" width="300" height="300"></canvas>
             <button id="clear-canvas-btn" class="action-btn">쓰기 초기화</button>
             <button id="go-first-btn" class="action-btn">처음으로</button>
