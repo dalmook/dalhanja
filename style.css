@@ -327,6 +327,16 @@ button:hover {
     overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
     transition: max-height 0.3s ease; /* 부드러운 전환 효과 */
 }
+/* stroke-order-svg 클래스 스타일링 */
+.stroke-order-svg {
+    position: absolute;
+    top: 10px;          /* 캔버스 상단으로부터의 거리 */
+    right: 10px;        /* 캔버스 우측으로부터의 거리 */
+    width: 80px;        /* SVG 이미지의 너비 */
+    height: 80px;       /* SVG 이미지의 높이 */
+    pointer-events: none; /* SVG 이미지가 캔버스 상호작용을 방해하지 않도록 설정 */
+}
+
 /* 반응형 디자인 */
 
 /* 모바일 세로 */
