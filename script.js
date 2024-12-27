@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let isRandom = false;
     let shuffledIndices = [];
     let isProcessing = false; // 추가된 부분
+    let svgLoopInterval = null; // SVG 애니메이션 루프 타이머
+
 
     // 캔버스 설정
     const ctx = writingCanvas.getContext('2d');
@@ -344,9 +346,26 @@ document.addEventListener('DOMContentLoaded', () => {
         // **쓰기순서 SVG 표시 시작**
         const strokeOrderSvg = document.getElementById('stroke-order-svg');
         if (currentHanja.쓰기순서) {
-            strokeOrderSvg.src = currentHanja.쓰기순서;
+            strokeOrderSvg.src = currentHanja.쓰기순서 + '?t=' + new Date().getTime(); // 캐싱 방지
+    
+            // 기존 타이머가 있다면 정리
+            if (svgLoopInterval) {
+                clearInterval(svgLoopInterval);
+            }
+    
+            // SVG 애니메이션 루프 설정
+            const animationDuration = 5000; // SVG 애니메이션의 전체 지속 시간(ms)으로 조정
+            svgLoopInterval = setInterval(() => {
+                strokeOrderSvg.src = currentHanja.쓰기순서 + '?t=' + new Date().getTime(); // 캐싱 방지
+            }, animationDuration);
         } else {
             strokeOrderSvg.src = ''; // SVG 초기화
+    
+            // 기존 타이머가 있다면 정리
+            if (svgLoopInterval) {
+                clearInterval(svgLoopInterval);
+                svgLoopInterval = null;
+            }
         }
         // **쓰기순서 SVG 표시 끝**
     
