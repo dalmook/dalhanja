@@ -291,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
             hanjaReading.innerText = '';
             hanjaChinese.innerText = ''; // 중국어 발음 초기화
             ctx.clearRect(0, 0, writingCanvas.width, writingCanvas.height);
+            document.getElementById('stroke-order-svg').src = ''; // SVG 초기화
             markCompletedCheckbox.checked = false;
             markCompletedCheckbox.disabled = true;
             currentHanja = null; // 현재 한자 없앰
@@ -341,19 +342,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.globalAlpha = 1.0; // 다시 불투명하게
     
         // **쓰기순서 SVG 표시 시작**
+        const strokeOrderSvg = document.getElementById('stroke-order-svg');
         if (currentHanja.쓰기순서) {
-            const writingOrderSvg = new Image();
-            writingOrderSvg.src = currentHanja.쓰기순서;
-            writingOrderSvg.onload = () => {
-                const svgWidth = 100; // 원하는 크기로 조절
-                const svgHeight = 100; // 원하는 크기로 조절
-                const x = canvasWidth - svgWidth - 10; // 우측 모서리에 10px 여백
-                const y = 10; // 상단 모서리에 10px 여백
-                ctx.drawImage(writingOrderSvg, x, y, svgWidth, svgHeight);
-            };
-            writingOrderSvg.onerror = () => {
-                console.error(`SVG 이미지 로드 실패: ${currentHanja.쓰기순서}`);
-            };
+            strokeOrderSvg.src = currentHanja.쓰기순서;
+        } else {
+            strokeOrderSvg.src = ''; // SVG 초기화
         }
         // **쓰기순서 SVG 표시 끝**
     
