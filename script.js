@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
     
             // SVG 애니메이션 루프 설정
-            const animationDuration = 5000; // SVG 애니메이션의 전체 지속 시간(ms)으로 조정
+            const animationDuration = 10000; // SVG 애니메이션의 전체 지속 시간(ms)으로 조정
             svgLoopInterval = setInterval(() => {
                 strokeOrderSvg.src = currentHanja.쓰기순서 + '?t=' + new Date().getTime(); // 캐싱 방지
             }, animationDuration);
