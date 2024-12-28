@@ -346,21 +346,24 @@ document.addEventListener('DOMContentLoaded', () => {
         // **쓰기순서 SVG 표시 시작**
         const strokeOrderSvg = document.getElementById('stroke-order-svg');
         if (currentHanja.쓰기순서) {
-            strokeOrderSvg.src = currentHanja.쓰기순서 + '?t=' + new Date().getTime(); // 캐싱 방지
-    
             // 기존 타이머가 있다면 정리
             if (svgLoopInterval) {
                 clearInterval(svgLoopInterval);
             }
-    
-            // SVG 애니메이션 루프 설정
-            const animationDuration = 10000; // SVG 애니메이션의 전체 지속 시간(ms)으로 조정
+
+            // 현재 한자의 duration 값 가져오기 (밀리초 단위)
+            const animationDuration = currentHanja.duration+2000 || 5000; // 기본값 5000ms
+
+            // SVG 로드 시 캐싱 방지를 위해 타임스탬프 추가
+            strokeOrderSvg.src = `${currentHanja.쓰기순서}?t=${new Date().getTime()}`;
+
+            // 애니메이션이 끝난 후 SVG를 다시 로드하여 애니메이션 재시작
             svgLoopInterval = setInterval(() => {
-                strokeOrderSvg.src = currentHanja.쓰기순서 + '?t=' + new Date().getTime(); // 캐싱 방지
+                strokeOrderSvg.src = `${currentHanja.쓰기순서}?t=${new Date().getTime()}`;
             }, animationDuration);
         } else {
             strokeOrderSvg.src = ''; // SVG 초기화
-    
+
             // 기존 타이머가 있다면 정리
             if (svgLoopInterval) {
                 clearInterval(svgLoopInterval);
