@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 unmarkHanjaAsLearned(hanja);
             }
-            currentIndex += 1; // 다음 한자로 이동
+            //currentIndex += 1; // 다음 한자로 이동
             displayHanja(); // 업데이트 후 표시
         }
     });
