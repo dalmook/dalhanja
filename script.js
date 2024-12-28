@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let shuffledIndices = [];
     let isProcessing = false; // 추가된 부분
     let svgLoopInterval = null; // SVG 애니메이션 루프 타이머
+    let currentUtterances = [];
 
 
     // 캔버스 설정
@@ -201,6 +202,41 @@ document.addEventListener('DOMContentLoaded', () => {
         displayHanja();
     }
 
+    function playHanjaTTS() {
+        if (!currentHanja) return;
+
+        // 웹 브라우저의 SpeechSynthesis 사용 시 기존 음성 중지
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+
+         // 기존 utterances 배열 초기화
+        currentUtterances = [];
+
+        const koreanText = `${currentHanja.뜻}. ${currentHanja.음}`;
+        const chineseText = currentHanja.한자;
+
+        // 안드로이드 환경에서 TTS 지원 시
+        if (typeof Android !== 'undefined' && Android.speak) {
+            Android.speak(`${koreanText}. ${chineseText}`);
+        }
+        // 웹 브라우저에서 TTS 지원 시
+        else if ('speechSynthesis' in window) {
+            const utteranceKorean = new SpeechSynthesisUtterance(koreanText);
+            utteranceKorean.lang = 'ko-KR';
+            window.speechSynthesis.speak(utteranceKorean);
+            currentUtterances.push(utteranceKorean);
+
+            const utteranceChinese = new SpeechSynthesisUtterance(chineseText);
+            utteranceChinese.lang = 'zh-CN';
+            window.speechSynthesis.speak(utteranceChinese);
+            currentUtterances.push(utteranceChinese);
+        }
+        else {
+            console.warn("이 브라우저는 음성 합성을 지원하지 않습니다.");
+        }
+        }
+
     // 순서 변경 시 초기화
     orderOptions.forEach(option => {
         option.addEventListener('change', () => {
@@ -208,12 +244,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 이전 버튼
+     // 이전 버튼
     prevBtn.addEventListener('click', () => {
         if (currentIndex > 0) {
             currentIndex--;
             displayHanja();
             saveProgress(selectedLevel, currentIndex);
+            playHanjaTTS();
         }
     });
 
@@ -223,33 +260,14 @@ document.addEventListener('DOMContentLoaded', () => {
             currentIndex++;
             displayHanja();
             saveProgress(selectedLevel, currentIndex);
+            playHanjaTTS();
+
         }
     });
 
     // 발음 듣기 버튼
     speakBtn.addEventListener('click', () => {
-        if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
-    
-        const koreanText = `${currentHanja.뜻}. ${currentHanja.음}`;
-        const chineseText = currentHanja.한자;
-    
-        // 안드로이드 환경에서 TTS 지원
-        if (typeof Android !== 'undefined' && Android.speak) {
-            Android.speak(koreanText, chineseText); // 두 개의 파라미터로 전달
-        }
-        // 웹 브라우저에서 TTS 지원
-        else if ('speechSynthesis' in window) {
-            const utteranceKorean = new SpeechSynthesisUtterance(koreanText);
-            utteranceKorean.lang = 'ko-KR';
-            window.speechSynthesis.speak(utteranceKorean);
-    
-            const utteranceChinese = new SpeechSynthesisUtterance(chineseText);
-            utteranceChinese.lang = 'zh-CN'; // 중국어 발음 설정
-            window.speechSynthesis.speak(utteranceChinese);
-        }
-        else {
-            console.warn("이 브라우저는 음성 합성을 지원하지 않습니다.");
-        }
+    playHanjaTTS();
     });
 
     // 학습완료 체크박스 이벤트
@@ -263,6 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             //currentIndex += 1; // 다음 한자로 이동
             displayHanja(); // 업데이트 후 표시
+            playHanjaTTS();
         }
     });
 
