@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!currentHanja) return; // 현재 한자가 없으면 실행 안함
     
         const koreanText = `${currentHanja.뜻}. ${currentHanja.음}`;
-        const chineseText = currentHanja.중국어;
+        const chineseText = currentHanja.한자;
     
         // 안드로이드 환경에서 TTS 지원
         if (typeof Android !== 'undefined' && Android.speak) {
