@@ -133,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 낱말게임 버튼
     gameBtn.addEventListener('click', () => {
+        startQuizGame();
         showScreen(gameScreen);
     });
 
@@ -162,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 뒤로가기 버튼 (낱말게임 화면에서 메인 메뉴로)
     backToMenuFromGame.addEventListener('click', () => {
+        initializeQuiz();
         showScreen(mainMenuScreen);
     });
 
