@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 안드로이드 환경에서 TTS 지원 시
         if (typeof Android !== 'undefined' && Android.speak) {
-            Android.speak(`${koreanText}. ${chineseText}`);
+            Android.speak(koreanText, chineseText); // 두 개의 파라미터로 전달
         }
         // 웹 브라우저에서 TTS 지원 시
         else if ('speechSynthesis' in window) {
