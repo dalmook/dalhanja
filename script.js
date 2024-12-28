@@ -491,8 +491,69 @@ document.addEventListener('DOMContentLoaded', () => {
     // 낱말게임 기능 구현
 
     // 퀴즈 게임 데이터 준비
-    let quizQuestions = [];
+    let quizQuestions = [];  
 
+    // 최고 점수 가져오기 함수
+    function getHighScores() {
+        return JSON.parse(localStorage.getItem('highScores')) || {};
+    }
+
+    // 특정 난이도의 최고 점수 가져오기 함수
+    function getHighScore(level) {
+        const highScores = getHighScores();
+        return highScores[level] || 0;
+    }
+
+    // 특정 난이도의 최고 점수 저장하기 함수
+    function setHighScore(level, score) {
+        const highScores = getHighScores();
+        if (!highScores[level] || score > highScores[level]) {
+            highScores[level] = score;
+            localStorage.setItem('highScores', JSON.stringify(highScores));
+            updateHighScoreUI(level, score);
+        }
+    }
+
+    // 최고 점수 UI 업데이트 함수
+    function updateHighScoreUI(level, score) {
+        const highScoreElement = document.getElementById(`high-score-${level}`);
+        if (highScoreElement) {
+            highScoreElement.innerText = `${level} 최고 점수: ${score}점`;
+        }
+    }
+
+    // 초기 로드 시 모든 최고 점수 UI 업데이트
+    function initializeHighScoresUI() {
+        const highScores = getHighScores();
+        for (const level in highScores) {
+            if (highScores.hasOwnProperty(level)) {
+                updateHighScoreUI(level, highScores[level]);
+            }
+        }
+    }
+
+    // 난이도 선택 함수 (예시)
+    function selectLevel(level) {
+        selectedLevel = level;
+        initializeQuiz();
+    }
+
+    // 학습하기 초기화 함수
+    function initializeQuiz() {
+        const totalQuestions = Math.min(20, hanjaData.length); // 총 20문제 또는 가능한 최대 문제 수
+        quizQuestions = shuffleArray([...Array(hanjaData.length).keys()])
+                            .slice(0, totalQuestions)
+                            .map(index => hanjaData[index]);
+        currentScoreSpan.innerText = '0';
+        
+        // 선택된 난이도에 따른 최고 점수 불러오기
+        let highScore = getHighScore(selectedLevel);
+        highScoreSpan.innerText = highScore.toString();
+        
+        loadNextQuizQuestion();
+    }
+
+    // 퀴즈 시작 함수 수정
     function startQuizGame() {
         showScreen(gameScreen);
         quizGame.style.display = 'block';
@@ -500,28 +561,38 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeQuiz();
     }
 
-    function initializeQuiz() {
-        const totalQuestions = Math.min(20, hanjaData.length); // 총 20문제 또는 가능한 최대 문제 수
-        quizQuestions = shuffleArray([...Array(hanjaData.length).keys()]).slice(0, totalQuestions).map(index => hanjaData[index]);
-        currentScoreSpan.innerText = '0';
-        let highScore = parseInt(localStorage.getItem('highScore')) || 0;
-        highScoreSpan.innerText = highScore.toString();
-        loadNextQuizQuestion();
+    // 퀴즈 종료 시점에 호출되는 함수 예시
+    function onQuizEnd(finalScore) {
+        updateScore(selectedLevel, finalScore);
     }
 
+    // 현재 점수를 기준으로 최고 점수 업데이트
+    function updateScore(currentLevel, currentScore) {
+        const highScore = getHighScore(currentLevel);
+        if (currentScore > highScore) {
+            setHighScore(currentLevel, currentScore);
+            alert(`축하합니다! 새로운 최고 점수: ${currentScore}점`);
+        } else {
+            alert(`현재 점수: ${currentScore}점. 최고 점수: ${highScore}점`);
+        }
+    }
+
+    // 퀴즈 종료 부분 수정
     function loadNextQuizQuestion() {
         if (quizQuestions.length === 0) {
             quizQuestion.innerHTML = '<b style="color: #ff6347;">퀴즈 완료!</b>'; // 질문을 bold 및 색상 변경
             quizOptions.innerHTML = '';
             quizFeedback.innerText = '';
             nextQuizBtn.style.display = 'none';
-            // Update high score if necessary
+            
+            // 현재 점수와 최고 점수 비교 및 업데이트
             let currentScore = parseInt(currentScoreSpan.innerText);
-            let highScore = parseInt(localStorage.getItem('highScore')) || 0;
+            let highScore = getHighScore(selectedLevel);
             if (currentScore > highScore) {
-                highScore = currentScore;
-                localStorage.setItem('highScore', highScore.toString());
-                highScoreSpan.innerText = highScore.toString();
+                setHighScore(selectedLevel, currentScore);
+                alert(`축하합니다! 새로운 최고 점수: ${currentScore}점`);
+            } else {
+                alert(`현재 점수: ${currentScore}점. 최고 점수: ${highScore}점`);
             }
             return;
         }
@@ -568,9 +639,27 @@ document.addEventListener('DOMContentLoaded', () => {
         nextQuizBtn.style.display = 'none';
     }
 
+    // 다음 퀴즈 로드 버튼 이벤트 수정
     nextQuizBtn.addEventListener('click', () => {
         loadNextQuizQuestion();
     });
+
+    // 초기화 및 최고 점수 UI 초기화
+    document.addEventListener('DOMContentLoaded', () => {
+        // 난이도 선택 요소 예시 (필요 시)
+        const levelSelector = document.getElementById('level-selector');
+        if (levelSelector) {
+            levelSelector.addEventListener('change', (event) => {
+                selectedLevel = event.target.value; // 예: '8급', '7급' 등
+                initializeQuiz();
+            });
+        }
+
+        // 초기 퀴즈 초기화 및 최고 점수 UI 초기화
+        initializeQuiz();
+        initializeHighScoresUI();
+    });
+
 
     // 매칭 게임 데이터 준비
     let matchingPairs = [];
