@@ -200,38 +200,42 @@ document.addEventListener('DOMContentLoaded', () => {
             shuffledIndices = [...Array(hanjaData.length).keys()];
         }
         displayHanja();
-        playHanjaTTS();
     }
 
     function playHanjaTTS() {
         if (!currentHanja) return;
-    
+
+        // 웹 브라우저의 SpeechSynthesis 사용 시 기존 음성 중지
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+
+         // 기존 utterances 배열 초기화
+        currentUtterances = [];
+
+        const koreanText = `${currentHanja.뜻}. ${currentHanja.음}`;
+        const chineseText = currentHanja.한자;
+
         // 안드로이드 환경에서 TTS 지원 시
-        if (typeof Android !== 'undefined' && Android.speak) {
-            const koreanText = `${currentHanja.뜻}. ${currentHanja.음}`;
-            const chineseText = currentHanja.한자;
-            Android.speak(koreanText, chineseText);
+        if (typeof Android !== 'undefined' && Android.speak) {      
+            Android.speak(koreanText, chineseText); // 두 개의 파라미터로 전달
         }
         // 웹 브라우저에서 TTS 지원 시
         else if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel(); // 기존 음성 중지
-    
-            const koreanText = `${currentHanja.뜻}. ${currentHanja.음}`;
-            const chineseText = currentHanja.한자;
-    
             const utteranceKorean = new SpeechSynthesisUtterance(koreanText);
             utteranceKorean.lang = 'ko-KR';
             window.speechSynthesis.speak(utteranceKorean);
-    
+            currentUtterances.push(utteranceKorean);
+
             const utteranceChinese = new SpeechSynthesisUtterance(chineseText);
             utteranceChinese.lang = 'zh-CN';
             window.speechSynthesis.speak(utteranceChinese);
+            currentUtterances.push(utteranceChinese);
         }
         else {
             console.warn("이 브라우저는 음성 합성을 지원하지 않습니다.");
         }
-    }
-    
+        }
 
     // 순서 변경 시 초기화
     orderOptions.forEach(option => {
@@ -246,7 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currentIndex--;
             displayHanja();
             saveProgress(selectedLevel, currentIndex);
-            Android.stop(); // 기존 음성 중지
             playHanjaTTS();
         }
     });
@@ -257,7 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currentIndex++;
             displayHanja();
             saveProgress(selectedLevel, currentIndex);
-            Android.stop(); // 기존 음성 중지
             playHanjaTTS();
 
         }
@@ -265,7 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 발음 듣기 버튼
     speakBtn.addEventListener('click', () => {
-        Android.stop(); // 기존 음성 중지    
         playHanjaTTS();
     });
 
@@ -280,7 +281,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             //currentIndex += 1; // 다음 한자로 이동
             displayHanja(); // 업데이트 후 표시
-            Android.stop(); // 기존 음성 중지
             playHanjaTTS();
         }
     });
