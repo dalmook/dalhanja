@@ -451,9 +451,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentScoreSpan.innerText = currentScore.toString();
                     }
                     nextQuizBtn.style.display = 'block';
-                });
-                quizOptions.appendChild(btn);
+                     // **모든 옵션 버튼 비활성화**
+            const allButtons = quizOptions.querySelectorAll('button');
+            allButtons.forEach(button => {
+                button.disabled = true;
             });
+        });
+        quizOptions.appendChild(btn);
+    });
 
         } else if (selectedQuizType === 'hanja') {
             // 퀴즈(한자): 한자를 보여주고 뜻과 음을 맞추는 퀴즈
@@ -495,9 +500,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentScoreSpan.innerText = currentScore.toString();
                     }
                     nextQuizBtn.style.display = 'block';
-                });
-                quizOptions.appendChild(btn);
+                        // **모든 옵션 버튼 비활성화**
+        const allButtons = quizOptions.querySelectorAll('button');
+        allButtons.forEach(button => {
+            button.disabled = true;
             });
+        });
+        quizOptions.appendChild(btn);
+    });
         }
 
         // Reset quizFeedback and hide nextQuizBtn
