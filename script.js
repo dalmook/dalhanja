@@ -415,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (selectedQuizType === 'meaningReading') {
             // 퀴즈(뜻음): 뜻과 음을 보여주고 한자를 맞추는 퀴즈
-            quizQuestion.innerHTML = `<b style="color: #1e90ff;">뜻이 "${currentQuestion.뜻}" (${currentQuestion.음})인 한자는?</b>`;
+            quizQuestion.innerHTML = `<b style="color: #1e90ff;">뜻과 음이 "${currentQuestion.뜻}" (${currentQuestion.음})인 한자는?</b>`;
 
             // 옵션 생성 (정답 포함 총 4개)
             let options = [currentQuestion.한자];
