@@ -457,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } else if (selectedQuizType === 'hanja') {
             // 퀴즈(한자): 한자를 보여주고 뜻과 음을 맞추는 퀴즈
-            quizQuestion.innerHTML = `<b><span style="color: #1e90ff;"> "${currentQuestion.한자}"</span></b> 의 뜻과 음은 무엇인가요?`;
+            quizQuestion.innerHTML = `<span style="color: #1e90ff;"> "${currentQuestion.한자}"</span> 의 뜻과 음은 무엇인가요?`;
 
             // 정답 조합
             let correctAnswer = `${currentQuestion.뜻} (${currentQuestion.음})`;
