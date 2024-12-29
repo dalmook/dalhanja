@@ -9,6 +9,7 @@
 </head>
 <body>
     <!-- 난이도 선택 화면 -->
+<!-- 난이도 선택 화면 -->
     <div id="difficulty-screen" class="screen active">
         <h1>한자 급수를 선택하세요</h1>
         <div class="buttons">
@@ -78,11 +79,12 @@
             <label>
                 <input type="radio" name="order" value="random"> 랜덤
             </label>
-            <button id="back-to-menu-from-study">뒤로</button>
+                 <button id="back-to-menu-from-study">뒤로</button>
         </div>
-        <div id="hanja-display" class="hanja-display">
+        <div id="hanja-display" style="position: relative;">
             <div class="hanja-info">
                 <span id="hanja-character"></span>
+                <button id="speak-btn">🔊</button>
             </div>
             <div class="hanja-details">
                 <p><span id="hanja-meaning"></span> (<span id="hanja-reading" class="reading"></span>) -<span id="hanja-chinese"></span> </p>
@@ -93,11 +95,7 @@
             <div class="stroke-order" style="display: none;">
                 <img id="stroke-order-img" src="" alt="쓰기 순서">
             </div>
-            <!-- 캔버스와 스피커 버튼을 감싸는 컨테이너 추가 -->
-            <div class="canvas-container">
-                <canvas id="writing-canvas" width="300" height="300"></canvas>
-                <button id="speak-btn" class="speak-btn" title="음성 읽기">🔊</button>
-            </div>
+            <canvas id="writing-canvas" width="300" height="300"></canvas>
             <button id="clear-canvas-btn" class="action-btn">쓰기 초기화</button>
             <button id="go-first-btn" class="action-btn">처음</button>
             
