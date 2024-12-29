@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentUtterances = [];
 
         const koreanText = `${currentHanja.뜻}. ${currentHanja.음}`;
-        const chineseText = currentHanja.중국어; // 발음을 중국어로 변경
+        const chineseText = currentHanja.한자; // 발음을 중국어로 변경
 
         // 안드로이드 환경에서 TTS 지원 시
         if (typeof Android !== 'undefined' && Android.speak) {      
