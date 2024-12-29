@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedLevel = levelNumber; // 레벨은 "1", "2", 등으로 설정
             const selectedLevelTitle = document.getElementById('selected-level-title');
             if (selectedLevelTitle) {
-                selectedLevelTitle.innerText = `레벨: ${selectedLevel}`;
+                selectedLevelTitle.innerText = `급수: ${selectedLevel}`;
             }
             studyLevelSpan.innerText = levelNumber; // 학습하기 화면에 표시
             loadHanjaData();
