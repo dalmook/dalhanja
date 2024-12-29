@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (selectedQuizType === 'meaningReading') {
             // 퀴즈(뜻음): 뜻과 음을 보여주고 한자를 맞추는 퀴즈
-            quizQuestion.innerHTML = `<b style="color: #1e90ff;">뜻과 음이 "${currentQuestion.뜻}" (${currentQuestion.음})인 한자는?</b>`;
+            quizQuestion.innerHTML = `<b style="color: #1e90ff;">"${currentQuestion.뜻}" (${currentQuestion.음})</b>인 한자는?`;
 
             // 옵션 생성 (정답 포함 총 4개)
             let options = [currentQuestion.한자];
@@ -457,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } else if (selectedQuizType === 'hanja') {
             // 퀴즈(한자): 한자를 보여주고 뜻과 음을 맞추는 퀴즈
-            quizQuestion.innerHTML = `<b style="color: #1e90ff;">한자 "${currentQuestion.한자}"의 뜻과 음은 무엇인가요?</b>`;
+            quizQuestion.innerHTML = `<b style="color: #1e90ff;">"${currentQuestion.한자}"</b>의 뜻과 음은 무엇인가요?`;
 
             // 정답 조합
             let correctAnswer = `${currentQuestion.뜻} (${currentQuestion.음})`;
