@@ -245,6 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showScreen(gameScreen);
         quizGame.style.display = 'block';
         matchingGame.style.display = 'none';
+        initializeQuiz('meaningReading');
         // 기존 quizGame 초기화 호출 제거
     });
 
@@ -290,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 낱말게임 옵션 버튼 클릭 이벤트
     /*
     quizGameBtn.addEventListener('click', () => {
+        initializeQuiz();
         startQuizGame();
     });
     */
